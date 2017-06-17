@@ -126,11 +126,8 @@
     }
 
     function overlappingPlay(audioElem) {
-      if (audioElem.ended || audioElem.currentTime === 0) {
-        audioElem.play();
-      } else {
-        audioElem.currentTime = 0;
-      }
+      audioElem.currentTime = 0;
+      audioElem.play();
     }
   </script>
 
