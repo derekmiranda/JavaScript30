@@ -67,8 +67,8 @@
     // play sound upon hitting data-key assoc w/ audio elem
     document.body.addEventListener('keydown', (event) => {
       playSound(event);
+      makeDivPlaying(event);
     });
-
     
     // maps keycodes to selected elements
     function createKeyMap(selector) {
@@ -81,13 +81,20 @@
       return elemMap;
     }
 
-    function playSound(event) {
-      const audioElem = audioElemMap[event.keyCode];
-      audioElem && overlappingPlay(audioElem);
+    function useMappedElement(map, keycode, fn) {
+      const elem = map[keycode];
+      elem && fn(elem);
     }
 
-    function makeDivPlaying(event) {
+    function playSound(event) {
+      useMappedElement(audioElemMap, event.keyCode, overlappingPlay);
+    }
 
+    // add playing class to div
+    function makeDivPlaying(event) {
+      useMappedElement(boxMap, event.keyCode, (divElem) => {
+        divElem.classList.add('playing');
+      });
     }
 
     function overlappingPlay(audioElem) {
