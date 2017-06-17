@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>JS Drum Kit</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 
@@ -57,10 +59,47 @@
   <audio data-key="75" src="sounds/tom.wav"></audio>
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
-<script>
+  <script>
+    // maps keycodes to audio elements
+    const audioElemMap = createKeyMap('audio');
+    const boxMap = createKeyMap('div.key');
 
-</script>
+    // play sound upon hitting data-key assoc w/ audio elem
+    document.body.addEventListener('keydown', (event) => {
+      playSound(event);
+    });
+
+    
+    // maps keycodes to selected elements
+    function createKeyMap(selector) {
+      const elemArr = Array.from(document.querySelectorAll(selector));
+      const elemMap = elemArr.reduce((map, elem) => {
+        const keycode = elem.getAttribute('data-key');
+        map[keycode] = elem;
+        return map;
+      }, {});
+      return elemMap;
+    }
+
+    function playSound(event) {
+      const audioElem = audioElemMap[event.keyCode];
+      audioElem && overlappingPlay(audioElem);
+    }
+
+    function makeDivPlaying(event) {
+
+    }
+
+    function overlappingPlay(audioElem) {
+      if (audioElem.currentTime === 0) {
+        audioElem.play();
+      } else {
+        audioElem.currentTime = 0;
+      }
+    }
+  </script>
 
 
 </body>
+
 </html>
