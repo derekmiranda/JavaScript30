@@ -31,10 +31,14 @@ body,html {
   text-shadow: 0 0 .5rem black;
 }
 
-.playing {
-  transform: scale(1.1);
+.key:hover, .playing {
+  cursor: pointer;
   border-color: #ffc600;
   box-shadow: 0 0 1rem #ffc600;
+} 
+
+.playing {
+  transform: scale(1.1);
 }
 
 kbd {

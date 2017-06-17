@@ -61,19 +61,36 @@
 
   <script>
     // maps keycodes to audio elements
-    const audioElemMap = createKeyMap('audio');
-    const boxMap = createKeyMap('div.key');
+    const audioElemArr = Array.from(document.querySelectorAll('audio'));
+    const audioElemMap = createKeyMap(audioElemArr);
+
+    const boxArr = Array.from(document.querySelectorAll('div.key'));
+    const boxMap = createKeyMap(boxArr);
+
+    // add click listeners for divs
+    boxArr.forEach((box) => {
+      box.addEventListener('mousedown', (e) => {
+        addPlayingClass(box);
+
+        const boxKeyCode = box.getAttribute('data-key');
+        playSound(boxKeyCode);
+      });
+
+      // remove playing class when mouse is off div or unactivated
+      ['mouseup', 'mouseleave'].forEach((event) => {
+        box.addEventListener(event, (e) => removePlayingClass(box));
+      })
+    })
 
     // play sound upon hitting data-key assoc w/ audio elem
-    document.body.addEventListener('keydown', playSound);
+    document.body.addEventListener('keydown', (e) => playSound(e.keyCode));
     document.body.addEventListener('keydown', makeDivPlaying);
-    
+
     // remove playing class from certain div
     document.body.addEventListener('keyup', stopDivPlaying);
-    
+
     // maps keycodes to selected elements
-    function createKeyMap(selector) {
-      const elemArr = Array.from(document.querySelectorAll(selector));
+    function createKeyMap(elemArr) {
       const elemMap = elemArr.reduce((map, elem) => {
         const keycode = elem.getAttribute('data-key');
         map[keycode] = elem;
@@ -87,21 +104,25 @@
       elem && fn(elem);
     }
 
-    function playSound(event) {
-      useMappedElement(audioElemMap, event.keyCode, overlappingPlay);
+    function playSound(keyCode) {
+      useMappedElement(audioElemMap, keyCode, overlappingPlay);
     }
 
     // add playing class to div
     function makeDivPlaying(event) {
-      useMappedElement(boxMap, event.keyCode, (divElem) => {
-        divElem.classList.add('playing');
-      });
+      useMappedElement(boxMap, event.keyCode, addPlayingClass);
     }
 
     function stopDivPlaying(event) {
-      useMappedElement(boxMap, event.keyCode, (divElem) => {
-        divElem.classList.remove('playing');
-      })
+      useMappedElement(boxMap, event.keyCode, removePlayingClass);
+    }
+
+    function addPlayingClass(divElem) {
+      divElem.classList.add('playing');
+    }
+
+    function removePlayingClass(divElem) {
+      divElem.classList.remove('playing');
     }
 
     function overlappingPlay(audioElem) {
