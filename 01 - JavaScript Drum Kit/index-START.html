@@ -67,8 +67,9 @@
     // play sound upon hitting data-key assoc w/ audio elem
     document.body.addEventListener('keydown', playSound);
     document.body.addEventListener('keydown', makeDivPlaying);
-
-    // remove 
+    
+    // remove playing class from certain div
+    document.body.addEventListener('keyup', stopDivPlaying);
     
     // maps keycodes to selected elements
     function createKeyMap(selector) {
@@ -95,6 +96,12 @@
       useMappedElement(boxMap, event.keyCode, (divElem) => {
         divElem.classList.add('playing');
       });
+    }
+
+    function stopDivPlaying(event) {
+      useMappedElement(boxMap, event.keyCode, (divElem) => {
+        divElem.classList.remove('playing');
+      })
     }
 
     function overlappingPlay(audioElem) {
