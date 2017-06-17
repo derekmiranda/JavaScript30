@@ -83,11 +83,11 @@
     })
 
     // play sound upon hitting data-key assoc w/ audio elem
-    document.body.addEventListener('keydown', (e) => playSound(e.keyCode));
-    document.body.addEventListener('keydown', makeDivPlaying);
+    window.addEventListener('keydown', (e) => playSound(e.keyCode));
+    window.addEventListener('keydown', makeDivPlaying);
 
     // remove playing class from certain div
-    document.body.addEventListener('keyup', stopDivPlaying);
+    window.addEventListener('keyup', stopDivPlaying);
 
     // maps keycodes to selected elements
     function createKeyMap(elemArr) {
