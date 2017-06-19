@@ -83,9 +83,15 @@
 
   <script>
     function createHandUpdateFunc(selector, maxNumUnits) {
+      // num to add to transform to prevent hand loop around
+      let baseDeg = 0;
       return function updateUnitOfTime(units) {
+        if (units === 0) {
+          baseDeg += 360;
+        }
+
         const hand = document.querySelector(selector);
-        const angle = 90 + (360 * units / maxNumUnits);
+        const angle = 90 + (360 * units / maxNumUnits) + baseDeg;
         hand.style.transform = `rotate(${angle}deg)`;
       }
     }
@@ -94,7 +100,8 @@
     const updateMins = createHandUpdateFunc('.min-hand', 60);
     const updateHours = createHandUpdateFunc('.hour-hand', 12);
 
-    function updateClock(date) {
+    function updateClock() {
+      const date = new Date();
       const secs = date.getSeconds();
       const mins = date.getMinutes();
       const hours = date.getHours() % 12;
@@ -103,13 +110,10 @@
       updateSecs(secs);
       updateMins(mins);
       updateHours(hours);
-
-      // schedule new update in a second
-      setTimeout(updateClock, 1000, new Date());
     }
 
-    updateClock(new Date());
-
+    updateClock();
+    setInterval(updateClock, 1000);
   </script>
 </body>
 
